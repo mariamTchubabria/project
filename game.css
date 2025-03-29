@@ -1,0 +1,472 @@
+/* --- Google Font Import --- */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
+
+/* --- Global Styles & Variables --- */
+:root {
+  --primary-color: #3498db; /* Blue */
+  --secondary-color: #2c3e50; /* Dark Blue/Gray */
+  --tertiary-color: #8e44ad; /* Purple */
+  --success-color: #2ecc71; /* Green */
+  --danger-color: #e74c3c; /* Red */
+  --warning-color: #f39c12; /* Orange */
+  --light-bg: #f8f9fc;
+  --border-color: #e4e7eb;
+  --text-color: #333;
+  --muted-text-color: #7f8c8d;
+  --white-color: #ffffff;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+
+  --border-radius: 8px;
+  --transition-speed: 0.3s;
+  --background-transition-speed: 0.6s; /* Slower transition for background */
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #eef2f7;
+  background-image: linear-gradient(to bottom right, #eef2f7, #dfe9f3);
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  margin: 0;
+  padding: 20px;
+  color: var(--text-color);
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Add this line */
+  align-items: center;
+  min-height: 100vh;
+  box-sizing: border-box;
+  /* Add transition for background properties */
+  transition: background-image var(--background-transition-speed) ease-in-out,
+    background-color var(--background-transition-speed) ease-in-out;
+}
+
+.mode-selection-container,
+.game-container {
+  background-color: var(--white-color);
+  padding: 30px 40px;
+  border-radius: var(--border-radius);
+  box-shadow: 0 8px 25px var(--shadow-color);
+  border: 1px solid var(--border-color);
+  text-align: center;
+  margin-bottom: 30px;
+  margin-top: 20px;
+  max-width: 700px;
+  width: 90%;
+  box-sizing: border-box;
+  position: relative; /* Needed for z-index */
+  z-index: 1;
+}
+
+/* --- Mode Specific Backgrounds (using data attribute) --- */
+
+/* Helper overlay to potentially dim background for better text contrast */
+body::before {
+  content: "";
+  position: fixed; /* Cover viewport */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0); /* Initially transparent */
+  z-index: -1; /* Place behind content */
+  transition: background-color var(--background-transition-speed) ease-in-out;
+  pointer-events: none; /* Allow clicks through */
+}
+
+/* Apply dimming only when a background image is actively set via attribute */
+body[data-mode-bg]::before {
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.2
+  ); /* Adjust opacity (0.0 to 1.0) as needed */
+}
+
+/* <<< CLASSIC MODE BACKGROUND >>> */
+body[data-mode-bg="classic"] {
+  background-image: url("/images/tbs.webp"); /* Use the specific URL */
+}
+/* <<< END CLASSIC MODE BACKGROUND >>> */
+
+body[data-mode-bg="math"] {
+  background-image: url("/images/math-curriculum.webp"); /* Use the new Math URL */
+}
+
+body[data-mode-bg="history"] {
+  background-image: url("https://i0.wp.com/calmatters.org/wp-content/uploads/2021/08/math-curriculum.jpg?w=2000&ssl=1"); /* Use the new Math URL */
+}
+
+/* --- Containers --- */
+/* Ensure containers are above the background dimming overlay */
+.mode-selection-container,
+.game-container {
+  background-color: var(--white-color);
+  padding: 30px 40px;
+  border-radius: var(--border-radius);
+  box-shadow: 0 8px 25px var(--shadow-color);
+  border: 1px solid var(--border-color);
+  text-align: center;
+  margin-bottom: 30px;
+  margin-top: 20px;
+  max-width: 700px;
+  width: 90%;
+  box-sizing: border-box;
+  position: relative; /* Needed for z-index */
+  z-index: 1;
+}
+
+.game-container {
+  max-width: 900px; /* Accommodate 6 inputs */
+  text-align: left; /* Reset text align for game */
+}
+
+/* === Rest of the CSS === */
+/* (Ensure all the other styles for buttons, inputs, results, responsive etc. */
+/*  from the previous "whole css" answer are included below this point) */
+
+.mode-selection-container h1 {
+  color: var(--secondary-color);
+  margin-top: 0;
+  margin-bottom: 25px;
+  font-weight: 700;
+}
+
+.mode-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 15px;
+}
+
+.mode-button {
+  padding: 15px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: 16px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
+  background-color: var(--light-bg);
+  color: var(--secondary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.mode-button:hover:not(:disabled) {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  border-color: var(--primary-color);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+}
+
+.mode-button:disabled {
+  background-color: #eee;
+  color: #aaa;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+h1#game-title {
+  color: var(--secondary-color);
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 30px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.game-info {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 25px;
+  background-color: var(--light-bg);
+  padding: 18px 22px;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+}
+
+.letter-display,
+.score-display {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--secondary-color);
+}
+
+#current-letter {
+  color: var(--danger-color);
+  font-size: 28px;
+  font-weight: 700;
+  margin-left: 5px;
+  vertical-align: middle;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.input-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+@media (min-width: 768px) {
+  .input-section {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (min-width: 500px) {
+  .game-container.classic-mode .input-section {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+}
+@media (min-width: 840px) {
+  .game-container.classic-mode .input-section {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.input-group.extra-input {
+  display: none;
+}
+
+.game-container.classic-mode .input-group.extra-input {
+  display: block;
+}
+
+.input-group {
+  margin-bottom: 0;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--secondary-color);
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: 16px;
+  font-family: inherit;
+  background-color: #fdfdfd;
+  transition: border-color var(--transition-speed) ease,
+    box-shadow var(--transition-speed) ease;
+  box-sizing: border-box;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+}
+
+input::placeholder {
+  color: #aaa;
+  opacity: 1;
+}
+
+.button-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+#change-mode-btn {
+  grid-column: 1 / -1;
+  margin-top: 5px;
+}
+
+button {
+  padding: 12px 15px;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 15px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color var(--transition-speed) ease, transform 0.1s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#submit-btn {
+  background-color: var(--success-color);
+  color: var(--white-color);
+}
+
+#submit-btn:hover:not(:disabled) {
+  background-color: #27ae60;
+  transform: translateY(-2px);
+}
+
+#next-round-btn {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+}
+
+#next-round-btn:hover:not(:disabled) {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+}
+
+#change-mode-btn {
+  background-color: var(--warning-color);
+  color: var(--white-color);
+}
+#change-mode-btn:hover {
+  background-color: #e67e22;
+  transform: translateY(-2px);
+}
+
+button:disabled {
+  background-color: #bdc3c7;
+  color: #7f8c8d;
+  cursor: not-allowed;
+  transform: none;
+  opacity: 0.7;
+}
+
+.results {
+  background-color: var(--light-bg);
+  padding: 20px 25px;
+  border-radius: var(--border-radius);
+  margin-top: 20px;
+  border: 1px solid var(--border-color);
+}
+
+.results h2 {
+  margin: 0 0 20px 0;
+  color: var(--secondary-color);
+  font-weight: 700;
+  text-align: center;
+}
+
+#answers-list {
+  margin-top: 0;
+}
+
+.answer-item {
+  padding: 15px;
+  margin-bottom: 12px;
+  border-radius: var(--border-radius);
+  background-color: var(--white-color);
+  border: 1px solid var(--border-color);
+  border-left-width: 5px;
+  transition: background-color var(--transition-speed) ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.answer-item.correct {
+  border-left-color: var(--success-color);
+  background-color: #e8f8f5;
+}
+
+.answer-item.incorrect {
+  border-left-color: var(--danger-color);
+}
+.answer-item.not-found {
+  border-left-color: #aaa;
+  background-color: #f5f5f5;
+}
+.answer-item.empty {
+  border-left-color: #aaa;
+  background-color: #f9f9f9;
+}
+
+.answer-item h3 {
+  margin: 0 0 8px 0;
+  color: var(--secondary-color);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.answer-item p {
+  margin: 4px 0;
+  font-size: 15px;
+  color: var(--muted-text-color);
+}
+
+.answer-item p:first-of-type {
+  font-weight: 600;
+  color: #555;
+}
+
+.answer-item p i {
+  color: #aaa;
+}
+
+@media (max-width: 940px) {
+  .game-container {
+    padding: 20px 25px;
+  }
+}
+
+@media (max-width: 767px) {
+  .game-container,
+  .mode-selection-container {
+    width: 95%;
+  }
+  .input-section,
+  .game-container.classic-mode .input-section {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .input-section,
+  .game-container.classic-mode .input-section {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  .game-info {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .button-group {
+    grid-template-columns: 1fr;
+  }
+
+  body {
+    padding: 10px;
+  }
+
+  .game-container,
+  .mode-selection-container {
+    padding: 15px 20px;
+    margin-left: 5px;
+    margin-right: 5px;
+    width: calc(100% - 10px);
+  }
+  h1 {
+    font-size: 20px;
+  }
+  .mode-selection-container h1 {
+    font-size: 22px;
+  }
+  .mode-button {
+    font-size: 15px;
+  }
+}
